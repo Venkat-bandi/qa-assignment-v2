@@ -1,0 +1,10 @@
+venv/ 
+__pycache__/ 
+*.pyc 
+reports/ 
+app/users.json 
+test_name.py 
+*.log 
+.env 
+downloaded_files/ 
+recordings/ 

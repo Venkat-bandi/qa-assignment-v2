@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">Shopping Cart</h1>
+    <p class="text-gray-500 mt-1">Review your items before checkout</p>
+</div>
+
+{% if not items %}
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-16 text-center">
+    <div class="text-7xl mb-4">🛒</div>
+    <p id="empty-cart" class="text-gray-500 text-lg mb-6">Your cart is empty</p>
+    <a href="/products" class="btn-primary inline-block text-white font-semibold px-8 py-3 rounded-xl">
+        Continue Shopping
+    </a>
+</div>
+{% else %}
+
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <table class="w-full" id="cart-table">
+        <thead class="bg-gray-50 border-b border-gray-100">
+            <tr>
+                <th class="text-left p-5 text-sm font-semibold text-gray-600 uppercase tracking-wide">Product</th>
+                <th class="text-left p-5 text-sm font-semibold text-gray-600 uppercase tracking-wide">Price</th>
+                <th class="text-left p-5 text-sm font-semibold text-gray-600 uppercase tracking-wide">Qty</th>
+                <th class="text-left p-5 text-sm font-semibold text-gray-600 uppercase tracking-wide">Total</th>
+                <th class="p-5"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr class="border-b border-gray-50 cart-row" data-id="{{ item.id }}">
+                <td class="p-5">
+                    <span class="font-medium text-gray-800 product-name">{{ item.name }}</span>
+                </td>
+                <td class="p-5 text-gray-600 product-price">${{ "%.2f"|format(item.price) }}</td>
+                <td class="p-5">
+                    <span class="inline-block bg-indigo-50 text-indigo-700 font-medium px-3 py-1 rounded-lg product-qty">{{ item.qty }}</span>
+                </td>
+                <td class="p-5 font-semibold text-gray-800 product-total">${{ "%.2f"|format(item.price * item.qty) }}</td>
+                <td class="p-5 text-right">
+                    <form method="post" action="/cart/remove/{{ item.id }}">
+                        <button type="submit" class="remove-btn text-sm text-red-500 hover:text-red-700 font-medium transition">
+                            Remove
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot class="bg-gray-50">
+            <tr>
+                <td colspan="3" class="text-right p-5 font-semibold text-gray-700">Subtotal:</td>
+                <td class="p-5 font-bold text-xl text-indigo-600" id="subtotal">${{ "%.2f"|format(subtotal) }}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div class="mt-8 flex justify-between items-center">
+    <a href="/products" class="text-indigo-600 font-medium hover:text-indigo-800">
+        ← Continue Shopping
+    </a>
+    <a href="/checkout" id="checkout-btn"
+       class="btn-primary text-white font-semibold px-10 py-3.5 rounded-xl">
+        Proceed to Checkout →
+    </a>
+</div>
+
+{% endif %}
+
+{% endblock %}
